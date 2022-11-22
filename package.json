@@ -1,0 +1,24 @@
+{
+  "name": "niwai-music-server",
+  "version": "1.0.0",
+  "main": "serve.js",
+  "repository": "https://github.com/zxp-yuluo/niwai-music-serve.git",
+  "author": "zxp-yuluo <zxp_10012991@163.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@koa/cors": "^4.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "koa": "^2.13.4",
+    "koa-body": "^6.0.1",
+    "koa-router": "^12.0.0",
+    "koa-static": "^5.0.0",
+    "mysql": "^2.18.1",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  },
+  "scripts": {
+    "start": "nodemon server.js"
+  }
+}
