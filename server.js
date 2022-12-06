@@ -7,8 +7,8 @@ const static = require('koa-static');
 // 解决前端跨域问题
 const cors = require('@koa/cors');
 const path = require('path');
+const users = require('./api/users/users');
 
-const users = require('./api/users/users')
 
 const server = new Koa()
 const router = new KoaRouter()
@@ -21,8 +21,6 @@ server.use(cors());
 
 server.use(router.routes());
 server.use(users.routes(), users.allowedMethods());
-
-
 
 router.get('/', async ctx => {
   ctx.body = {
