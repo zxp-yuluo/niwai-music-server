@@ -2,6 +2,8 @@ const router = require('koa-router')();
 
 const nwQuery = require('../../db/database');
 
+router.prefix('/test');
+
 // 获取所以用户(测试)
 router.get('/users', async ctx => {
   const sql = 'SELECT * FROM test'
