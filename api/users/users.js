@@ -10,8 +10,8 @@ router.post('/users', async ctx => {
   const username = ctx.request.body.username
   const password = md5(ctx.request.body.password)
   const create_time = new Date().toLocaleString()
-  const sql = "INSERT INTO test (username,password,create_time,role)  VALUES (?,?,?,?)"
-  const querySql = 'SELECT * FROM test WHERE username=?'
+  const sql = "INSERT INTO users (username,password,create_time,role)  VALUES (?,?,?,?)"
+  const querySql = 'SELECT * FROM users WHERE username=?'
   const params = [username, password, create_time, '']
   console.log(username,password,create_time);
   try {
