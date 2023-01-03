@@ -15,28 +15,56 @@ router.post('/users', async ctx => {
   const params = [username, password, create_time, '']
   try {
     // 查询用户是否已存在
-    const queryResult = await nwQuery(querySql,username)
-    if(queryResult.length) {
+    const queryResult = await nwQuery(querySql, username)
+    if (queryResult.length) {
       ctx.body = {
-        state: 0,
+        status: 0,
         data: null,
         message: '用户已存在！'
       }
       return
     }
     // 添加用户
-    const addResult = await nwQuery(sql,params)
+    const addResult = await nwQuery(sql, params)
     // 查询添加的用户
-    const result = await nwQuery(querySql,username)
+    const result = await nwQuery(querySql, username)
     delete result[0].password
     ctx.body = {
-      state: 1,
+      status: 1,
       data: result,
       message: '添加成功！'
     }
   } catch (error) {
     ctx.body = {
-      state: 0,
+      status: 0,
+      data: null,
+      message: '请求失败：' + error.message
+    }
+  }
+})
+
+// 获取用户
+router.get('/users', async ctx => {
+  console.log(ctx.request.query);
+  const {id} = ctx.request.query
+  const allSql = 'SELECT * FROM users'
+  const sql = 'SELECT * FROM users WHERE id=?'
+  let result
+  try {
+    if(id) {
+      result = await nwQuery(sql,id)
+    }else {
+      result = await nwQuery(allSql)
+    }
+    console.log('result:',result);
+    ctx.body = {
+      status: 1,
+      data: result,
+      message: '获取成功！'
+    }
+  } catch (error) {
+    ctx.body = {
+      status: 0,
       data: null,
       message: '请求失败：' + error.message
     }
