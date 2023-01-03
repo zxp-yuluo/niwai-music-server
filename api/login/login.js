@@ -19,7 +19,7 @@ router.post('/login', async ctx => {
     // 判断是否有该用户名的数据
     if(!result.length) {
       ctx.body = {
-        state: 0,
+        status: 0,
         data: null,
         message: '该用户不存在！'
       }
@@ -29,7 +29,7 @@ router.post('/login', async ctx => {
     // 判断密码是否正确
     if(md5(password) !== resultPassword) {
       ctx.body = {
-        state: 0,
+        status: 0,
         data: null,
         message: '密码不正确！'
       }
@@ -37,14 +37,14 @@ router.post('/login', async ctx => {
     }
     delete result[0].password
     ctx.body = {
-      state: 1,
+      status: 1,
       data: result,
       message: '登录成功！',
       token
     }
   } catch (error) {
     ctx.body = {
-      state: 0,
+      status: 0,
       data: null,
       message: '请求失败：' + error.message
     }
