@@ -5,10 +5,11 @@ const { koaBody } = require('koa-body');
 // koa-static 是一个提供静态资源访问的中间件。
 const static = require('koa-static');
 // 解决前端跨域问题
-const cors = require('@koa/cors');
+// const cors = require('@koa/cors');
 const path = require('path');
 
-const test = require('./api/test/test')
+// 登录
+const login = require('./api/login/login')
 
 const server = new Koa()
 const router = new KoaRouter()
@@ -17,10 +18,10 @@ server.use(static(path.resolve(__dirname + '/public')));
 
 server.use(koaBody());
 
-server.use(cors());
+// server.use(cors());
 
 server.use(router.routes());
-server.use(test.routes(), test.allowedMethods());
+server.use(login.routes(), login.allowedMethods());
 
 
 
