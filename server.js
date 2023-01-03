@@ -8,7 +8,8 @@ const static = require('koa-static');
 const cors = require('@koa/cors');
 const path = require('path');
 
-const test = require('./api/test/test')
+// 登录
+const login = require('./api/login/login')
 
 const server = new Koa()
 const router = new KoaRouter()
@@ -20,7 +21,7 @@ server.use(koaBody());
 server.use(cors());
 
 server.use(router.routes());
-server.use(test.routes(), test.allowedMethods());
+server.use(login.routes(), login.allowedMethods());
 
 
 
