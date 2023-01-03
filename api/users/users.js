@@ -13,17 +13,26 @@ router.post('/users', async ctx => {
   const sql = "INSERT INTO test (username,password,create_time,role)  VALUES (?,?,?,?)"
   const querySql = 'SELECT * FROM test WHERE username=?'
   const params = [username, password, create_time, '']
-  const queryParams = username
   console.log(username,password,create_time);
   try {
+    // 查询用户是否已存在
+    const queryResult = await nwQuery(querySql,username)
+    if(queryResult.length) {
+      ctx.body = {
+        state: 0,
+        data: null,
+        message: '用户已存在！'
+      }
+      return
+    }
+    // 添加用户
     const addResult = await nwQuery(sql,params)
-    console.log('addResult:',addResult);
-    const queryResult = await nwQuery(querySql,queryParams)
-    console.log('queryResult:',queryResult);
-    delete queryResult[0].password
+    // 查询添加的用户
+    const result = await nwQuery(querySql,username)
+    delete result[0].password
     ctx.body = {
       state: 1,
-      data: queryResult,
+      data: result,
       message: '添加成功！'
     }
   } catch (error) {
