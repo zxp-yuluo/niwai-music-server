@@ -13,7 +13,6 @@ router.post('/users', async ctx => {
   const sql = "INSERT INTO users (username,password,create_time,role)  VALUES (?,?,?,?)"
   const querySql = 'SELECT * FROM users WHERE username=?'
   const params = [username, password, create_time, '']
-  console.log(username,password,create_time);
   try {
     // 查询用户是否已存在
     const queryResult = await nwQuery(querySql,username)
