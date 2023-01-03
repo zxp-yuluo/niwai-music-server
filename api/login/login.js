@@ -6,7 +6,7 @@ const { generateToken, verifyToken } = require('../../token/token')
 // 登录
 router.post('/login', async ctx => {
   const {username,password} = ctx.request.body
-  const sql = 'SELECT * FROM test WHERE username=?'
+  const sql = 'SELECT * FROM users WHERE username=?'
   
   try {
     const result = await nwQuery(sql,username)
