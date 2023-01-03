@@ -6,7 +6,7 @@ router.prefix('/test');
 
 // 获取所以用户(测试)
 router.get('/users', async ctx => {
-  const sql = 'SELECT * FROM test'
+  const sql = 'SELECT * FROM users'
   try {
     const result = await nwQuery(sql)
     ctx.body = {
