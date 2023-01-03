@@ -1,17 +1,21 @@
 const router = require('koa-router')();
-
+const md5 = require('md5');
 const nwQuery = require('../../db/database');
+const { generateToken, verifyToken } = require('../../token/token')
 
-// router.prefix('/test');
-
-// 获取所以用户(测试)
+// 登录
 router.post('/login', async ctx => {
   const {username,password} = ctx.request.body
-  // console.log(username,password);
   const sql = 'SELECT * FROM test WHERE username=?'
+  
   try {
     const result = await nwQuery(sql,username)
-    console.log("result:",result);
+    const token = generateToken({
+      id: result.id,
+      username: result.username,
+      role: result.role,
+      create_time: result.create_time
+    })
     // 判断是否有该用户名的数据
     if(!result.length) {
       ctx.body = {
@@ -22,9 +26,8 @@ router.post('/login', async ctx => {
       return
     }
     const {username:resultUsername,password:resultPassword} = result[0]
-    console.log('resultUsername:',resultUsername,'resultPassword:',resultPassword);
     // 判断密码是否正确
-    if(password !== resultPassword) {
+    if(md5(password) !== resultPassword) {
       ctx.body = {
         state: 0,
         data: null,
@@ -36,7 +39,8 @@ router.post('/login', async ctx => {
     ctx.body = {
       state: 1,
       data: result,
-      message: '登录成功！'
+      message: '登录成功！',
+      token
     }
   } catch (error) {
     ctx.body = {
