@@ -38,7 +38,7 @@ router.post('/login', async ctx => {
     delete result[0].password
     ctx.body = {
       status: 1,
-      data: result,
+      data: result[0],
       message: '登录成功！',
       token
     }
