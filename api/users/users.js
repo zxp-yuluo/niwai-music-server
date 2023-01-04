@@ -4,10 +4,10 @@ const {verifyToken} = require('../../token/token')
 
 const nwQuery = require('../../db/database');
 
-// router.prefix('/users');
+router.prefix('/users');
 
 // 添加用户
-router.post('/users', async ctx => {
+router.post('/', async ctx => {
   const username = ctx.request.body.username
   const password = md5(ctx.request.body.password)
   const create_time = new Date().toLocaleString()
@@ -44,32 +44,44 @@ router.post('/users', async ctx => {
   }
 })
 
-// 获取用户
-router.get('/users', async ctx => {
-  console.log(ctx.request.headers.authorization);
+// 获取所有用户信息
+router.get('/', async ctx => {
   const {authorization} = ctx.request.headers
   // 请求是否带有token
-  if(!authorization) {
-    ctx.throw(401)
-    return
-  }
+  if(!authorization) ctx.throw(401)
   const boolean = verifyToken(authorization.replace('niwai_',''))
   // token过期
-  if(!boolean) {
-    ctx.throw(403)
-    return
-  }
-  const {id} = ctx.request.query
-  const allSql = 'SELECT * FROM users'
-  const sql = 'SELECT * FROM users WHERE id=?'
-  let result
+  if(!boolean) ctx.throw(401)
+  const sql = 'SELECT * FROM users'
   try {
-    if(id) {
-      result = await nwQuery(sql,id)
-    }else {
-      result = await nwQuery(allSql)
-    }
+    const result = await nwQuery(sql)
     console.log('result:',result);
+    ctx.body = {
+      status: 1,
+      data: result,
+      message: '获取成功！'
+    }
+  } catch (error) {
+    ctx.body = {
+      status: 0,
+      data: null,
+      message: '请求失败：' + error.message
+    }
+  }
+})
+
+// 根据id获取用户信息
+router.get('/:id', async ctx => {
+  const {authorization} = ctx.request.headers
+  // 请求是否带有token
+  if(!authorization) ctx.throw(401)
+  const boolean = verifyToken(authorization.replace('niwai_',''))
+  // token过期
+  if(!boolean) ctx.throw(401)
+  const {id} = ctx.request.params
+  const sql = 'SELECT * FROM users WHERE id=?'
+  try {
+    const result = await nwQuery(sql,id)
     ctx.body = {
       status: 1,
       data: result,
