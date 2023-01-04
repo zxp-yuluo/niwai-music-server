@@ -48,7 +48,7 @@ router.post('/', async ctx => {
 router.get('/', async ctx => {
   const {authorization} = ctx.request.headers
   // 请求是否带有token
-  if(!authorization) ctx.throw(401)
+  if(!authorization) ctx.throw(401,'请求是否带有token')
   const boolean = verifyToken(authorization.replace('niwai_',''))
   // token过期
   if(!boolean) ctx.throw(401)
@@ -74,7 +74,7 @@ router.get('/', async ctx => {
 router.get('/:id', async ctx => {
   const {authorization} = ctx.request.headers
   // 请求是否带有token
-  if(!authorization) ctx.throw(401)
+  if(!authorization) ctx.throw(401,'请求是否带有token')
   const boolean = verifyToken(authorization.replace('niwai_',''))
   // token过期
   if(!boolean) ctx.throw(401)
