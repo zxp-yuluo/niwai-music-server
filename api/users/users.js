@@ -48,12 +48,17 @@ router.post('/users', async ctx => {
 router.get('/users', async ctx => {
   console.log(ctx.request.headers.authorization);
   const {authorization} = ctx.request.headers
+  // 请求是否带有token
   if(!authorization) {
     ctx.throw(401)
     return
   }
   const boolean = verifyToken(authorization.replace('niwai_',''))
-  console.log(boolean);
+  // token过期
+  if(!boolean) {
+    ctx.throw(403)
+    return
+  }
   const {id} = ctx.request.query
   const allSql = 'SELECT * FROM users'
   const sql = 'SELECT * FROM users WHERE id=?'
