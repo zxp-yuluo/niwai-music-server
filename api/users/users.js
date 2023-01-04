@@ -1,5 +1,6 @@
 const router = require('koa-router')();
 const md5 = require('md5');
+const {verifyToken} = require('../../token/token')
 
 const nwQuery = require('../../db/database');
 
@@ -45,7 +46,14 @@ router.post('/users', async ctx => {
 
 // 获取用户
 router.get('/users', async ctx => {
-  console.log(ctx.request.query);
+  console.log(ctx.request.headers.authorization);
+  const {authorization} = ctx.request.headers
+  if(!authorization) {
+    ctx.throw(401)
+    return
+  }
+  const boolean = verifyToken(authorization.replace('niwai_',''))
+  console.log(boolean);
   const {id} = ctx.request.query
   const allSql = 'SELECT * FROM users'
   const sql = 'SELECT * FROM users WHERE id=?'
