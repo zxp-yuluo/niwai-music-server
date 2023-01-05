@@ -1,6 +1,5 @@
 const router = require('koa-router')();
 const md5 = require('md5');
-const {verifyToken} = require('../../token/token')
 
 const nwQuery = require('../../db/database');
 
@@ -46,12 +45,6 @@ router.post('/', async ctx => {
 
 // 获取所有用户信息
 router.get('/', async ctx => {
-  const {authorization} = ctx.request.headers
-  // 请求是否带有token
-  if(!authorization) ctx.throw(401,'请求是否带有token')
-  const boolean = verifyToken(authorization.replace('niwai_',''))
-  // token过期
-  if(!boolean) ctx.throw(401)
   const sql = 'SELECT * FROM users'
   try {
     const result = await nwQuery(sql)
@@ -72,12 +65,6 @@ router.get('/', async ctx => {
 
 // 根据id获取用户信息
 router.get('/:id', async ctx => {
-  const {authorization} = ctx.request.headers
-  // 请求是否带有token
-  if(!authorization) ctx.throw(401,'请求是否带有token')
-  const boolean = verifyToken(authorization.replace('niwai_',''))
-  // token过期
-  if(!boolean) ctx.throw(401)
   const {id} = ctx.request.params
   const sql = 'SELECT * FROM users WHERE id=?'
   try {
