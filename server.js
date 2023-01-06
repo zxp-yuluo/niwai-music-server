@@ -8,8 +8,10 @@ const static = require('koa-static');
 // const cors = require('@koa/cors');
 const path = require('path');
 
-// 登录
+// 登录API
 const login = require('./api/login/login')
+// 歌单API
+const sheet = require('./api/sheet/sheet')
 
 const server = new Koa()
 const router = new KoaRouter()
@@ -22,6 +24,7 @@ server.use(koaBody());
 
 server.use(router.routes());
 server.use(login.routes(), login.allowedMethods());
+server.use(sheet.routes(), sheet.allowedMethods());
 
 
 
