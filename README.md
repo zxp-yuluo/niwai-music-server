@@ -315,7 +315,7 @@ GET
 #### 地址
 
 ```
-/sheets/:username
+/sheets/:id
 ```
 
 #### 方式
@@ -352,6 +352,132 @@ PUT
         }
     ],
     "message": "修改成功！"
+}
+```
+
+##### 失败
+
+```json
+// 请求失败。
+{
+    "status": 0,
+    "data": null,
+    "message": "请求失败：ER_NO_SUCH_TABLE: Table 'test.ts1' doesn't exist"
+}
+```
+
+### 根据id删除歌单
+
+#### 地址
+
+```
+/sheets/:id
+```
+
+#### 方式
+
+```
+DELETE
+```
+
+#### 返回示例
+
+##### 成功
+
+```json
+{
+    "status": 1,
+    "data": {},
+    "message": "删除成功！"
+}
+```
+
+##### 失败
+
+```json
+// 请求失败。
+{
+    "status": 0,
+    "data": null,
+    "message": "请求失败：ER_NO_SUCH_TABLE: Table 'test.ts1' doesn't exist"
+}
+```
+
+### 获取推荐歌单
+
+#### 地址
+
+```
+/sheets/recommend
+```
+
+#### 方式
+
+```
+GET
+```
+
+#### 返回示例
+
+##### 成功
+
+```json
+{
+    "status": 1,
+    "data": [
+        {
+            "id": 12,
+            "name": "开口即惊艳｜爱意东升西落，浪漫至死不渝",
+            "describe": "“我在黄昏写上一封书信，载着落日的余晖和银河的浪漫，寄给你，寄给温柔本身。”",
+            "cover": null,
+            "tag": null,
+            "create_time": "2023-01-06T06:13:22.000Z",
+            "create_author": "弄熊来",
+            "song_id": null
+        },
+        {
+            "id": 9,
+            "name": "华语｜难以被复制，声线极具特色女歌手",
+            "describe": "华语乐坛向来不乏缺少好声音，然而真正具有鲜明特质的声音还是不多，这些鲜明的特质一方面包括声音的穿透、力度以及感染度，同时，当这样的一个具有鲜明特质的声音一出来，就会让听歌的人感觉到“未见其人，先闻其声。”",
+            "cover": null,
+            "tag": null,
+            "create_time": "2023-01-06T02:12:16.000Z",
+            "create_author": "弄熊来",
+            "song_id": null
+        },
+        {
+            "id": 7,
+            "name": "2023全网超好听热门歌曲推荐（持续更新）",
+            "describe": "祝你新的一年，平安喜乐！\n2023全网超好听热门流行歌曲分享，持续更新，欢迎投稿，欢迎收藏推荐，蟹蟹小伙伴们支持哦~♥",
+            "cover": null,
+            "tag": null,
+            "create_time": "2023-01-06T01:28:36.000Z",
+            "create_author": "珩萧雨溪",
+            "song_id": null
+        },
+        null,
+        {
+            "id": 15,
+            "name": "好好生活 慢慢相遇",
+            "describe": "希望你有永远的朋友 自己喜欢的工作 然后有可以将你从坏情绪中打捞起来的爱好 能轻易到达的喜爱风景 有充足的睡眠 独处也不焦躁的快乐 最后如果还有时间才是爱情 希望你有更多的自由 爱情只是你自由之外的快乐",
+            "cover": null,
+            "tag": null,
+            "create_time": "2023-01-06T08:36:38.000Z",
+            "create_author": "弄熊来",
+            "song_id": null
+        },
+        {
+            "id": 8,
+            "name": "[华语私人订制] 最懂你的华语推荐 每日更新35首",
+            "describe": "全都是耐听的华语好歌\n这里是你的专属华语日推\n收藏订阅，歌荒，不存在的事",
+            "cover": null,
+            "tag": null,
+            "create_time": "2023-01-06T02:10:14.000Z",
+            "create_author": "弄熊来",
+            "song_id": null
+        }
+    ],
+    "message": "获取成功！"
 }
 ```
 
