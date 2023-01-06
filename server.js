@@ -7,6 +7,7 @@ const static = require('koa-static');
 // 解决前端跨域问题
 // const cors = require('@koa/cors');
 const path = require('path');
+const {verifyToken} = require('./token/token')
 
 // 登录API
 const login = require('./api/login/login')
@@ -15,6 +16,16 @@ const sheet = require('./api/sheet/sheet')
 
 const server = new Koa()
 const router = new KoaRouter()
+
+server.use( async (ctx,next) => {
+  const {authorization} = ctx.request.headers
+  // 请求是否带有token
+  if(!authorization) ctx.throw(401)
+  const boolean = verifyToken(authorization.replace('niwai_',''))
+  // token过期
+  if(!boolean) ctx.throw(401)
+  await next()
+})
 
 server.use(static(path.resolve(__dirname + '/public')));
 
