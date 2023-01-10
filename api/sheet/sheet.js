@@ -6,11 +6,11 @@ router.prefix('/sheets');
 
 // 添加歌单
 router.post('/', async ctx => {
-  const { name, describe, create_author } = ctx.request.body
+  const { name, describe, create_author,cover } = ctx.request.body
   const create_time = new Date().toLocaleString()
-  const sql = "INSERT INTO song_sheets(`name`,`describe`,create_time,create_author) VALUES(?,?,?,?)"
+  const sql = "INSERT INTO song_sheets(`name`,`describe`,create_time,create_author,cover) VALUES(?,?,?,?,?)"
   const querySql = "SELECT * FROM song_sheets WHERE name=?"
-  const params = [name, describe, create_time, create_author]
+  const params = [name, describe, create_time, create_author,cover?cover:'']
   try {
     // 查询歌单名字是否已存在
     const queryResult = await nwQuery(querySql, name)
@@ -88,14 +88,6 @@ router.get('/:username', async ctx => {
   const params = [ctx.request.params.username]
   try {
     const result = await nwQuery(sql, params)
-    if (!result.length) {
-      ctx.body = {
-        status: 0,
-        data: null,
-        message: '获取失败！'
-      }
-      return
-    }
     // 处理时间
     result.map(item => {
       return item.create_time = dayjs(item.create_time).format('YYYY-MM-DD  HH:mm:ss')
