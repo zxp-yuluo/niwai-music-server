@@ -5,13 +5,13 @@ const nwQuery = require('../../db/database');
 
 router.prefix('/upload');
 
-// 上传文件
-router.post('/', async ctx => {
-  const { file } = ctx.request.files
+// 上传图片
+router.post('/image', async ctx => {
+  const { image } = ctx.request.files
   const fileType = ['image/jpeg', 'image/png']
-  if (file) {
-    if (!fileType.includes(file.mimetype)) {
-      const filePathName = path.join(__dirname, '../../public/image/' + file.newFilename)
+  if (image) {
+    if (!fileType.includes(image.mimetype)) {
+      const filePathName = path.join(__dirname, '../../public/image/' + image.newFilename)
       fs.unlink(filePathName, (err) => {
         if (err) {
           return false;
@@ -27,9 +27,9 @@ router.post('/', async ctx => {
     ctx.body = {
       status: 1,
       data: {
-        name: file.newFilename,
-        file,
-        url: 'http://localhost:8888/image/' + file.newFilename
+        name: image.newFilename,
+        image: {},
+        url: 'http://localhost:8888/image/' + image.newFilename
       },
       message: '上传成功！'
     }
@@ -37,19 +37,18 @@ router.post('/', async ctx => {
     ctx.body = {
       status: 0,
       data: null,
-      message: '请求失败：' + error.message
+      message: '上传失败！'
     }
   }
 })
 
-// 根据文件名删除文件
+// 根据名字删除图片 
 router.delete('/picture/:name', async ctx => {
   const { name } = ctx.request.params
   const filePathName = path.join(__dirname, '../../public/image/' + name)
   const isExists = fs.existsSync(filePathName)
   if (isExists) {
     fs.unlink(filePathName, (err) => {
-      console.log(ctx.request.params, err);
       if (err) {
         return false;
       }
@@ -59,7 +58,7 @@ router.delete('/picture/:name', async ctx => {
       data: {},
       message: '删除成功！'
     }
-  }else {
+  } else {
     ctx.body = {
       status: 0,
       data: null,
@@ -67,6 +66,109 @@ router.delete('/picture/:name', async ctx => {
     }
   }
 })
-
-
+// 上传音频
+router.post('/audio', async ctx => {
+  const { audio } = ctx.request.files
+  const fileType = ['audio/midi', 'audio/mpeg', 'audio/webm', 'audio/ogg', 'audio/wav']
+  if (audio) {
+    if (!fileType.includes(audio.mimetype)) {
+      const filePathName = path.join(__dirname, '../../public/audio/' + audio.newFilename)
+      fs.unlink(filePathName, (err) => {
+        if (err) {
+          return false;
+        }
+      })
+      ctx.body = {
+        status: 0,
+        data: null,
+        message: '不支持的文件格式！'
+      }
+      return
+    }
+    ctx.body = {
+      status: 1,
+      data: {
+        name: audio.newFilename,
+        audio: {},
+        url: 'http://localhost:8888/audio/' + audio.newFilename
+      },
+      message: '上传成功！'
+    }
+  } else {
+    ctx.body = {
+      status: 0,
+      data: null,
+      message: '上传失败！'
+    }
+  }
+})
+// 根据名字删除音频
+router.delete('/audio/:name', async ctx => {
+  const { name } = ctx.request.params
+  const filePathName = path.join(__dirname, '../../public/audio/' + name)
+  const isExists = fs.existsSync(filePathName)
+  if (isExists) {
+    fs.unlink(filePathName, (err) => {
+      if (err) {
+        return false;
+      }
+    })
+    ctx.body = {
+      status: 1,
+      data: {},
+      message: '删除成功！'
+    }
+  } else {
+    ctx.body = {
+      status: 0,
+      data: null,
+      message: '文件不存在！'
+    }
+  }
+})
+// 上传歌词
+router.post('/lyrics', async ctx => {
+  const { lyrics } = ctx.request.files
+  if (lyrics) {
+    ctx.body = {
+      status: 1,
+      data: {
+        name: lyrics.newFilename,
+        lyrics: {},
+        url: 'http://localhost:8888/lyrics/' + lyrics.newFilename
+      },
+      message: '上传成功！'
+    }
+  } else {
+    ctx.body = {
+      status: 0,
+      data: null,
+      message: '上传失败！'
+    }
+  }
+})
+// 根据名字删除音频
+router.delete('/lyrics/:name', async ctx => {
+  const { name } = ctx.request.params
+  const filePathName = path.join(__dirname, '../../public/lyrics/' + name)
+  const isExists = fs.existsSync(filePathName)
+  if (isExists) {
+    fs.unlink(filePathName, (err) => {
+      if (err) {
+        return false;
+      }
+    })
+    ctx.body = {
+      status: 1,
+      data: {},
+      message: '删除成功！'
+    }
+  } else {
+    ctx.body = {
+      status: 0,
+      data: null,
+      message: '文件不存在！'
+    }
+  }
+})
 module.exports = router

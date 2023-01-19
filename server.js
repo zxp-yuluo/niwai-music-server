@@ -38,20 +38,34 @@ server.use(static(path.resolve(__dirname + '/public')));
 server.use(koaBody({
   multipart: true,
   formidable: {
-    uploadDir: path.join(__dirname, './public/image'),
+    uploadDir: path.join(__dirname, './public'),
     keepExtensions: true,
     onFileBegin: (name, file) => {
+      // console.log('传的是：', name);
+      // const imageType = ['image/png', 'image/jpeg']
+      // const audioType = ['audio/midi', 'audio/mpeg', 'audio/webm', 'audio/ogg', 'audio/wav']
+      // 保持文件路径
+      let dir
       // 获取文件后缀
       let ext = file.newFilename.split('.');
       ext = ext[ext.length - 1]
-      // 保持文件路径
-      const uploadDir = path.join(__dirname, './public/image/')
+      switch (name) {
+        case 'image':
+          dir = path.join(__dirname, './public/image/')
+          break;
+        case 'audio':
+          dir = path.join(__dirname, './public/audio/')
+          break;
+        case 'lyrics':
+          dir = path.join(__dirname, './public/lyrics/')
+          break;
+      }
       const fileName = 'niwaiyinyue_' + uuidv4() + '.' + ext
       file.newFilename = fileName
-      file.filepath = uploadDir + fileName
+      file.filepath = dir + fileName
     },
     onError: (error) => {
-      console.log(error);
+      console.log('上传出现错误：', error);
     }
   }
 }));

@@ -1,4 +1,4 @@
-# niwai-music-server
+#  niwai-music-server
 
 ## 服务器地址
 
@@ -249,6 +249,12 @@ GET
 ```
 GET
 ```
+
+#### 参数类型
+
+| 参数名称 | 类型   | 是否必选 | 描述   |
+| -------- | ------ | -------- | ------ |
+| username | string | 是       | 用户名 |
 
 #### 返回示例
 
@@ -578,7 +584,7 @@ DELETE
 #### 地址
 
 ```
-/songs
+/songs/:create_author/:pageNum/:pageSize
 ```
 
 #### 方式
@@ -589,22 +595,121 @@ GET
 
 #### 参数类型
 
-| 参数名称 | 类型   | 是否必选 | 描述     |
-| -------- | ------ | -------- | -------- |
-| pageNum  | number | 是       | 页码     |
-| pageSize | number | 是       | 每页数量 |
+| 参数名称      | 类型   | 是否必选 | 描述       |
+| ------------- | ------ | -------- | ---------- |
+| create_author | string | 是       | 用户名     |
+| pageNum       | number | 是       | 页数       |
+| pageSize      | number | 是       | 每页的数量 |
+
+
 
 #### 返回示例
 
 ##### 成功
 
 ```json
-
+{
+    "status": 1,
+    "data": [
+        {
+            "id": 1,
+            "song_name": "东风破",
+            "author_id": 1,
+            "author_name": "周杰伦",
+            "lyrics": null,
+            "image": "http://localhost:8888/image/niwaiyinyue_21c37db2-d7a0-402f-a871-7df916e09d2e.jpeg",
+            "album_name": "叶惠美",
+            "album_id": 1,
+            "url": "http://localhost:8888/audio/niwaiyinyue_286a84ca-a7ce-4f61-b1a5-cb05e3ff15a6.mp3",
+            "create_time": "2023-01-10T05:26:54.000Z",
+            "create_author": "弄熊来"
+        },
+        {
+            "id": 2,
+            "song_name": "烟花易冷",
+            "author_id": 1,
+            "author_name": "周杰伦",
+            "lyrics": null,
+            "image": "http://localhost:8888/image/niwaiyinyue_9606a5ad-67c9-465d-9c4f-21a2db633bd5.jpeg",
+            "album_name": "跨时代",
+            "album_id": 2,
+            "url": "http://localhost:8888/audio/niwaiyinyue_a2975d27-1cd0-4152-8fab-0bcfe9c7f3e5.mp3",
+            "create_time": "2023-01-09T09:54:59.000Z",
+            "create_author": "弄熊来"
+        }
+    ],
+    "message": "获取成功！"
+}
 ```
 
 ##### 失败
 
 ```json
+{
+    "status": 0,
+    "data": null,
+    "message": "请求失败：ER_SP_UNDECLARED_VAR: Undeclared variable: NaN"
+}
+```
 
+### 搜索关键字获取歌曲列表
+
+#### 地址    keyword的值singer或song
+
+```
+/songs/search/:keywordType/:keyword/:create_author/:pageNum/:pageSi ze
+```
+
+#### 方式
+
+```
+GET
+```
+
+#### 参数类型
+
+| 参数名称      | 类型   | 是否必选 | 描述                                    |
+| ------------- | ------ | -------- | --------------------------------------- |
+| create_author | string | 是       | 用户名                                  |
+| pageNum       | number | 是       | 页数                                    |
+| pageSize      | number | 是       | 每页的数量                              |
+| keyword       | string | 二选一   | 根据歌手搜索(歌手名字)   **值：singer** |
+| keyword       | string | 二选一   | 根据歌曲搜索(歌曲名字)   **值：song**   |
+| keywordType   | string | 是       | 根据什么搜索的(歌手或歌曲)              |
+
+#### 返回示例
+
+##### 成功
+
+```json
+{
+    "status": 1,
+    "data": [
+        {
+            "id": 1,
+            "song_name": "东风破",
+            "author_id": 1,
+            "author_name": "周杰伦",
+            "lyrics": null,
+            "image": "http://localhost:8888/image/niwaiyinyue_21c37db2-d7a0-402f-a871-7df916e09d2e.jpeg",
+            "album_name": "叶惠美",
+            "album_id": 1,
+            "url": "http://localhost:8888/audio/niwaiyinyue_286a84ca-a7ce-4f61-b1a5-cb05e3ff15a6.mp3",
+            "create_time": "2023-01-10T05:26:54.000Z",
+            "create_author": "弄熊来"
+        }
+    ],
+    "message": "请求成功！"
+}
+```
+
+##### 失败
+
+```json
+{
+    "status": 0,
+    "data": null,
+    "message": "请求失败：ER_EMPTY_QUERY: Query was empty"
+}
 ```
 
