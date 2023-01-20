@@ -14,16 +14,16 @@ const {verifyToken} = require('./token/token')
 const server = new Koa()
 const router = new KoaRouter()
 
-server.use( async (ctx,next) => {
-  console.log(ctx.request.headers.authorization);
-  const {authorization} = ctx.request.headers
-  // 请求是否带有token
-  if(!authorization) ctx.throw(401)
-  const boolean = verifyToken(authorization.replace('niwai_',''))
-  // token过期
-  if(!boolean) ctx.throw(401)
-  await next()
-})
+// server.use( async (ctx,next) => {
+//   console.log(ctx.request.headers.authorization);
+//   const {authorization} = ctx.request.headers
+//   // 请求是否带有token
+//   if(!authorization) ctx.throw(401)
+//   const boolean = verifyToken(authorization.replace('niwai_',''))
+//   // token过期
+//   if(!boolean) ctx.throw(401)
+//   await next()
+// })
 
 server.use(static(path.resolve(__dirname + '/public')));
 
