@@ -498,6 +498,8 @@ GET
 }
 ```
 
+## 上传文件
+
 ### 上传图片
 
 #### 地址
@@ -514,9 +516,9 @@ POST
 
 #### 参数类型
 
-| 参数名称 | 类型   | 是否必选 | 描述 |
-| -------- | ------ | -------- | ---- |
-| file     | number | 是       | 页码 |
+| 参数名称 | 类型 | 是否必选 | 描述     |
+| -------- | ---- | -------- | -------- |
+| image    | file | 是       | 图片文件 |
 
 #### 返回示例
 
@@ -579,29 +581,25 @@ DELETE
 }
 ```
 
-### 获取歌曲列表
+### 上传音频
 
 #### 地址
 
 ```
-/songs/:create_author/:pageNum/:pageSize
+/upload
 ```
 
 #### 方式
 
 ```
-GET
+POST
 ```
 
 #### 参数类型
 
-| 参数名称      | 类型   | 是否必选 | 描述       |
-| ------------- | ------ | -------- | ---------- |
-| create_author | string | 是       | 用户名     |
-| pageNum       | number | 是       | 页数       |
-| pageSize      | number | 是       | 每页的数量 |
-
-
+| 参数名称 | 类型 | 是否必选 | 描述     |
+| -------- | ---- | -------- | -------- |
+| audio    | file | 是       | 音频文件 |
 
 #### 返回示例
 
@@ -610,35 +608,11 @@ GET
 ```json
 {
     "status": 1,
-    "data": [
-        {
-            "id": 1,
-            "song_name": "东风破",
-            "author_id": 1,
-            "author_name": "周杰伦",
-            "lyrics": null,
-            "image": "http://localhost:8888/image/niwaiyinyue_21c37db2-d7a0-402f-a871-7df916e09d2e.jpeg",
-            "album_name": "叶惠美",
-            "album_id": 1,
-            "url": "http://localhost:8888/audio/niwaiyinyue_286a84ca-a7ce-4f61-b1a5-cb05e3ff15a6.mp3",
-            "create_time": "2023-01-10T05:26:54.000Z",
-            "create_author": "弄熊来"
-        },
-        {
-            "id": 2,
-            "song_name": "烟花易冷",
-            "author_id": 1,
-            "author_name": "周杰伦",
-            "lyrics": null,
-            "image": "http://localhost:8888/image/niwaiyinyue_9606a5ad-67c9-465d-9c4f-21a2db633bd5.jpeg",
-            "album_name": "跨时代",
-            "album_id": 2,
-            "url": "http://localhost:8888/audio/niwaiyinyue_a2975d27-1cd0-4152-8fab-0bcfe9c7f3e5.mp3",
-            "create_time": "2023-01-09T09:54:59.000Z",
-            "create_author": "弄熊来"
-        }
-    ],
-    "message": "获取成功！"
+    "data": {
+        "name": "niwaiyinyue_1c53ed7fd2ea46a11a16af200.MP3",
+        "url": "http://localhost:8888/image/niwaiyinyue_1c53ed7fd2ea46a11a16af200.MP3"
+    },
+    "message": "上传成功！"
 }
 ```
 
@@ -648,13 +622,138 @@ GET
 {
     "status": 0,
     "data": null,
-    "message": "请求失败：ER_SP_UNDECLARED_VAR: Undeclared variable: NaN"
+    "message": "不支持的文件格式！"
+}
+{
+    "status": 0,
+    "data": null,
+    "message": "上传失败！"
 }
 ```
 
+### 根据名字删除音频
+
+#### 地址
+
+```
+/upload/audio/:name
+```
+
+#### 方式
+
+```
+DELETE
+```
+
+#### 返回示例
+
+##### 成功
+
+```json
+{
+    "status":1,
+    "data":{},
+    "message":"删除成功！"
+}
+```
+
+##### 失败
+
+```json
+{
+    "status": 0,
+    "data": null,
+    "message": "删除失败！"
+}
+```
+
+### 上传歌词 （后缀lrc文件）
+
+#### 地址
+
+```
+/upload
+```
+
+#### 方式
+
+```
+POST
+```
+
+#### 参数类型
+
+| 参数名称 | 类型 | 是否必选 | 描述     |
+| -------- | ---- | -------- | -------- |
+| lyrics   | file | 是       | 歌词文件 |
+
+#### 返回示例
+
+##### 成功
+
+```json
+{
+    "status": 1,
+    "data": {
+        "name": "niwaiyinyue_1c53ed7fd2ea46a11a16af200.lrc",
+        "url": "http://localhost:8888/image/niwaiyinyue_1c53ed7fd2ea46a11a16af200.lrc"
+    },
+    "message": "上传成功！"
+}
+```
+
+##### 失败
+
+```json
+
+{
+    "status": 0,
+    "data": null,
+    "message": "上传失败！"
+}
+```
+
+### 根据名字删除歌词
+
+#### 地址
+
+```
+/upload/lyrics/:name
+```
+
+#### 方式
+
+```
+DELETE
+```
+
+#### 返回示例
+
+##### 成功
+
+```json
+{
+    "status":1,
+    "data":{},
+    "message":"删除成功！"
+}
+```
+
+##### 失败
+
+```json
+{
+    "status": 0,
+    "data": null,
+    "message": "删除失败！"
+}
+```
+
+## 歌曲
+
 ### 搜索关键字获取歌曲列表
 
-#### 地址    keyword的值singer或song
+#### 地址    keyword的值singer、song或all
 
 ```
 /songs/search/:keywordType/:keyword/:create_author/:pageNum/:pageSi ze
@@ -666,16 +765,17 @@ GET
 GET
 ```
 
-#### 参数类型
+参数类型
 
 | 参数名称      | 类型   | 是否必选 | 描述                                    |
 | ------------- | ------ | -------- | --------------------------------------- |
 | create_author | string | 是       | 用户名                                  |
 | pageNum       | number | 是       | 页数                                    |
 | pageSize      | number | 是       | 每页的数量                              |
-| keyword       | string | 二选一   | 根据歌手搜索(歌手名字)   **值：singer** |
-| keyword       | string | 二选一   | 根据歌曲搜索(歌曲名字)   **值：song**   |
-| keywordType   | string | 是       | 根据什么搜索的(歌手或歌曲)              |
+| keywordType   | string | 三选一   | 默认获取歌曲列表  **值：all**           |
+| keywordType   | string | 三选一   | 根据歌手搜索(歌手名字)   **值：singer** |
+| keywordType   | string | 三选一   | 根据歌曲搜索(歌曲名字)   **值：song**   |
+| keyword       | string | 否       | 搜索关键字                              |
 
 #### 返回示例
 
@@ -710,6 +810,313 @@ GET
     "status": 0,
     "data": null,
     "message": "请求失败：ER_EMPTY_QUERY: Query was empty"
+}
+```
+
+### 添加歌曲
+
+#### 地址
+
+```
+/songs
+```
+
+#### 方式
+
+```
+POST
+```
+
+#### 参数类型
+
+| 参数名称    | 类型   | 是否必选 | 描述             |
+| ----------- | ------ | -------- | ---------------- |
+| song_name   | string | 是       | 歌名             |
+| author_name | number | 是       | 歌手名字         |
+| lyrics      | number | 否       | 歌词 后缀lrc文件 |
+| image       | string | 否       | 歌曲封面         |
+| album_name  | string | 否       | 专辑名字         |
+| url         | string | 是       | 音频地址         |
+
+#### 返回示例
+
+##### 成功
+
+```json
+{
+  "status": 1,
+  "data": {
+    "id": 43,
+    "song_name": "烟花易冷",
+    "author_id": null,
+    "author_name": "周杰伦",
+    "lyrics": "http://localhost:8888/lyrics/niwaiyinyue_f30c9be4-00b9-478b-98f0-a8e24c6ca78a.lrc",
+    "image": "http://localhost:8888/image/niwaiyinyue_ca51991d-aacc-4d94-b308-7957d5d46213.jpg",
+    "album_name": "跨时代",
+    "album_id": null,
+    "url": "http://localhost:8888/audio/niwaiyinyue_4d3ae513-2bef-4c0e-87e5-274632c4b750.mp3",
+    "create_time": "2023-01-19T03:02:26.000Z",
+    "create_author": "弄熊来"
+  },
+  "message": "添加成功！"
+}
+```
+
+##### 失败
+
+```json
+{
+  "status": 0,
+  "data": null,
+  "message": "添加失败！"
+}
+```
+
+### *根据id删除歌曲*
+
+#### 地址
+
+```
+/songs/:id
+```
+
+#### 方式
+
+```
+DELETE
+```
+
+#### 返回示例
+
+##### 成功
+
+```json
+{
+  "status": 1,
+  "data": {},
+  "message": "删除成功！"
+}
+```
+
+##### 失败
+
+```json
+{
+  "status": 0,
+  "data": null,
+  "message": "删除失败！"
+}
+```
+
+### 根据id修改歌曲
+
+#### 地址
+
+```
+/songs/:id
+```
+
+#### 方式
+
+```
+PUT
+```
+
+#### 类型参数
+
+| 参数名称    | 类型   | 是否必选 | 描述             |
+| ----------- | ------ | -------- | ---------------- |
+| song_name   | string | 是       | 歌名             |
+| author_name | string | 是       | 歌手名字         |
+| lyrics      | string | 否       | 歌词 后缀lrc文件 |
+| image       | string | 否       | 歌曲封面         |
+| album_name  | string | 否       | 专辑名字         |
+| url         | string | 是       | 音频地址         |
+
+#### 返回示例
+
+##### 成功
+
+```json
+{
+  "status": 1,
+  "data": [
+    {
+      "id": 45,
+      "song_name": "红颜如霜",
+      "author_id": null,
+      "author_name": "周杰伦",
+      "lyrics": "http://localhost:8888/lyrics/niwaiyinyue_8113e65c-9939-4418-bb9f-38a0e5e5f9eb.lrc",
+      "image": "http://localhost:8888/image/niwaiyinyue_2778e79b-cefa-4818-b713-bb43243c1f52.jpg",
+      "album_name": "最伟大的作品",
+      "album_id": null,
+      "url": "http://localhost:8888/audio/niwaiyinyue_1fffcba1-90e7-4984-9249-b1e37350529e.mp3",
+      "create_time": "2023-01-19T03:05:04.000Z",
+      "create_author": "弄熊来"
+    }
+  ],
+  "message": "修改成功！"
+}
+```
+
+##### 失败
+
+```json
+{
+  "status": 0,
+  "data": null,
+  "message": "修改失败！"
+}
+```
+
+## 角色
+
+### 获取角色列表
+
+#### 地址
+
+```
+/roles
+```
+
+#### 方式
+
+```
+GET
+```
+
+#### 返回示例
+
+##### 成功
+
+```json
+{
+    "status": 1,
+    "data": [
+        {
+            "id": 1,
+            "role_name": "管理员",
+            "create_time": "2023-01-19  12:56:45",
+            "auth_time": null,
+            "auth_name": "弄熊来"
+        },
+        {
+            "id": 2,
+            "role_name": "测试1",
+            "create_time": "2023-01-19  13:11:07",
+            "auth_time": null,
+            "auth_name": null
+        }
+    ],
+    "message": "获取成功！"
+}
+```
+
+##### 失败
+
+```json
+{
+    "status": 0,
+    "data": null,
+    "message": "获取失败！"
+}
+```
+
+### 添加角色
+
+#### 地址
+
+```
+/roles
+```
+
+#### 方式
+
+```
+POST
+```
+
+#### 参数类型
+
+| 参数名称  | 类型   | 是否必选 | 描述     |
+| --------- | ------ | -------- | -------- |
+| role_name | string | 是       | 角色名字 |
+
+#### 返回示例
+
+##### 成功
+
+```json
+{
+    "status": 1,
+    "data": {
+        "id": 2,
+        "role_name": "测试1",
+        "create_time": "2023-01-19T05:11:07.000Z",
+        "auth_time": null,
+        "auth_name": null
+    },
+    "message": "添加成功！"
+}
+```
+
+##### 失败
+
+```json
+{
+    "status": 0,
+    "data": null,
+    "message": "添加失败！"
+}
+```
+
+### 角色授权
+
+#### 地址
+
+```
+/roles/:id  
+```
+
+#### 方式
+
+```
+PUT
+```
+
+#### 参数类型
+
+| 参数名称  | 类型   | 是否必选 | 描述        |
+| --------- | ------ | -------- | ----------- |
+| auth_name | string | 是       | 授权人      |
+| menus     | array  | 是       | 权限key数组 |
+
+#### 返回示例
+
+##### 成功
+
+```json
+{
+  "status": 1,
+  "data": {
+    "id": 1,
+    "role_name": "管理员",
+    "create_time": "2023-01-19T04:56:45.000Z",
+    "auth_time": "2023-01-20T02:47:06.000Z",
+    "auth_name": "弄熊来",
+    "menus": "[\"home\",\"sheet\",\"song\",\"manage\",\"role\"]"
+  },
+  "message": "授权成功！"
+}
+```
+
+##### 失败
+
+```json
+{
+  "status": 0,
+  "data": null,
+  "message": "授权失败！"
 }
 ```
 

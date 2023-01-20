@@ -147,7 +147,7 @@ router.post('/lyrics', async ctx => {
     }
   }
 })
-// 根据名字删除音频
+// 根据名字删除歌词
 router.delete('/lyrics/:name', async ctx => {
   const { name } = ctx.request.params
   const filePathName = path.join(__dirname, '../../public/lyrics/' + name)

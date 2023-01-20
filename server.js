@@ -19,6 +19,8 @@ const sheet = require('./api/sheet/sheet')
 const song = require('./api/song/song')
 // 上传图片
 const upload = require('./api/upload/upload');
+//  角色API
+const role = require('./api/role/role');
 
 const server = new Koa()
 const router = new KoaRouter()
@@ -77,6 +79,7 @@ server.use(login.routes(), login.allowedMethods());
 server.use(sheet.routes(), sheet.allowedMethods());
 server.use(song.routes(), song.allowedMethods());
 server.use(upload.routes(), upload.allowedMethods());
+server.use(role.routes(), role.allowedMethods());
 
 
 

@@ -113,8 +113,10 @@ router.put('/:id', async ctx => {
     }
   }
   sql = sql.slice(0,sql.length - 1) + ' WHERE id=?'
+  const querySql = "SELECT  * FROM songs WHERE id=?"
   try {
-    const result = await nwQuery(sql,id)
+    await nwQuery(sql,id)
+    const result = await nwQuery(querySql,id)
     ctx.body = {
       status: 1,
       data: result,
