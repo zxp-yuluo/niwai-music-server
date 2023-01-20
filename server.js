@@ -19,13 +19,17 @@ const sheet = require('./api/sheet/sheet')
 const song = require('./api/song/song')
 // 上传图片
 const upload = require('./api/upload/upload');
-//  角色API
+// 角色API
 const role = require('./api/role/role');
+// 用户API
+const users = require('./api/users/users');
+
 
 const server = new Koa()
 const router = new KoaRouter()
 
 // server.use( async (ctx,next) => {
+//   console.log(ctx.request.headers.authorization);
 //   const {authorization} = ctx.request.headers
 //   // 请求是否带有token
 //   if(!authorization) ctx.throw(401)
@@ -80,9 +84,7 @@ server.use(sheet.routes(), sheet.allowedMethods());
 server.use(song.routes(), song.allowedMethods());
 server.use(upload.routes(), upload.allowedMethods());
 server.use(role.routes(), role.allowedMethods());
-
-
-
+server.use(users.routes(), users.allowedMethods());
 router.get('/', async ctx => {
   ctx.body = {
     title: "腻歪音乐-server",
