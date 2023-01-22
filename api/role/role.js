@@ -66,7 +66,6 @@ router.get('/', async ctx => {
 router.put('/:id', async ctx => {
   const {auth_name,menus} = ctx.request.body
   const {id} = ctx.request.params
-  console.log(auth_name,id,menus);
   const auth_time = new Date().toLocaleString()
   const sql = "UPDATE roles SET auth_time=?,auth_name=?,menus=? WHERE id=?"
   const querySql ="SELECT * FROM roles WHERE id=?"
@@ -74,7 +73,6 @@ router.put('/:id', async ctx => {
   try {
     await nwQuery(sql,params)
     const result = await nwQuery(querySql,id)
-    console.log(result);
     ctx.body = {
       status: 1,
       data: result[0],

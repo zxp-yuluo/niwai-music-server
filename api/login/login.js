@@ -6,7 +6,12 @@ const { generateToken, verifyToken } = require('../../token/token')
 // 登录
 router.post('/login', async ctx => {
   const {username,password} = ctx.request.body
-  const sql = 'SELECT * FROM users WHERE username=?'
+  // const sql = 'SELECT * FROM users WHERE username=?'
+  const sql = `
+  SELECT u.id,u.username,u.password,u.create_time,u.role_id,r.menus FROM users u LEFT OUTER JOIN roles r
+  ON u.role_id=r.id 
+  WHERE u.username=?
+  `  
   
   try {
     const result = await nwQuery(sql,username)
@@ -25,7 +30,7 @@ router.post('/login', async ctx => {
       }
       return
     }
-    const {username:resultUsername,password:resultPassword} = result[0]
+    const {password:resultPassword} = result[0]
     // 判断密码是否正确
     if(md5(password) !== resultPassword) {
       ctx.body = {

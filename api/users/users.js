@@ -1,5 +1,6 @@
 const router = require('koa-router')();
 const md5 = require('md5');
+const dayjs = require('dayjs');
 
 const nwQuery = require('../../db/database');
 
@@ -7,12 +8,12 @@ router.prefix('/users');
 
 // 添加用户
 router.post('/', async ctx => {
-  const username = ctx.request.body.username
+  const {username,role_name} = ctx.request.body
   const password = md5(ctx.request.body.password)
   const create_time = new Date().toLocaleString()
-  const sql = "INSERT INTO users (username,password,create_time,role)  VALUES (?,?,?,?)"
+  const sql = "INSERT INTO users (username,password,create_time,role_id)  VALUES (?,?,?,?)"
   const querySql = 'SELECT * FROM users WHERE username=?'
-  const params = [username, password, create_time, '']
+  const params = [username, password, create_time, role_name]
   try {
     // 查询用户是否已存在
     const queryResult = await nwQuery(querySql, username)
@@ -25,13 +26,13 @@ router.post('/', async ctx => {
       return
     }
     // 添加用户
-    const addResult = await nwQuery(sql, params)
+    await nwQuery(sql, params)
     // 查询添加的用户
     const result = await nwQuery(querySql, username)
     delete result[0].password
     ctx.body = {
       status: 1,
-      data: result,
+      data: result[0],
       message: '添加成功！'
     }
   } catch (error) {
@@ -53,10 +54,12 @@ router.get('/', async ctx => {
   `
   try {
     const result = await nwQuery(sql)
-    console.log('result:', result);
+    result.map(item => {
+      return item.create_time = dayjs(item.create_time).format('YYYY-MM-DD  HH:mm:ss')
+    })
     ctx.body = {
       status: 1,
-      data: result,
+      data: result.reverse(),
       message: '获取成功！'
     }
   } catch (error) {
@@ -74,7 +77,6 @@ router.get('/:id', async ctx => {
   const sql = 'SELECT * FROM users WHERE id=?'
   try {
     const result = await nwQuery(sql,id)
-
     ctx.body = {
       status: 1,
       data: result,
@@ -92,7 +94,6 @@ router.get('/:id', async ctx => {
 // 根据id删除用户信息
 router.delete('/:id', async ctx => {
   const { id } = ctx.request.params
-  console.log(id);
   const sql = 'DELETE FROM users WHERE id=?'
   const querySql = 'SELECT * FROM users WHERE id=?'
   try {
