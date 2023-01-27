@@ -102,5 +102,5 @@ router.get('/', async ctx => {
 });
 
 server.listen(8888, () => {
-  console.log('服务已启动http://localhost:8888');
+  console.log('服务已启动http://139.196.78.237');
 });
