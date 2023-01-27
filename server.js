@@ -23,21 +23,28 @@ const upload = require('./api/upload/upload');
 const role = require('./api/role/role');
 // 用户API
 const users = require('./api/users/users');
+// 歌手API
+const singer = require('./api/singer/singer');
+// 专辑API
+const album = require('./api/album/album');
 
 
 const server = new Koa()
 const router = new KoaRouter()
 
-// server.use( async (ctx,next) => {
-//   console.log(ctx.request.headers.authorization);
-//   const {authorization} = ctx.request.headers
-//   // 请求是否带有token
-//   if(!authorization) ctx.throw(401)
-//   const boolean = verifyToken(authorization.replace('niwai_',''))
-//   // token过期
-//   if(!boolean) ctx.throw(401)
-//   await next()
-// })
+server.use( async (ctx,next) => {
+  const path = ctx.request.path.split('/')[1]
+  const pathType = ['login','image','audio','lyrics']
+  if(!pathType.includes(path)) {
+    const {authorization} = ctx.request.headers
+    // 请求是否带有token
+    if(!authorization) ctx.throw(401)
+    const boolean = verifyToken(authorization.replace('niwai_',''))
+    // token过期
+    if(!boolean) ctx.throw(401)
+  }
+  await next()
+})
 
 server.use(static(path.resolve(__dirname + '/public')));
 
@@ -85,6 +92,8 @@ server.use(song.routes(), song.allowedMethods());
 server.use(upload.routes(), upload.allowedMethods());
 server.use(role.routes(), role.allowedMethods());
 server.use(users.routes(), users.allowedMethods());
+server.use(singer.routes(), singer.allowedMethods());
+server.use(album.routes(), album.allowedMethods());
 router.get('/', async ctx => {
   ctx.body = {
     title: "腻歪音乐-server",

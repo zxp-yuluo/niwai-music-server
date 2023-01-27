@@ -1,7 +1,6 @@
 const path = require('path')
 const fs = require('fs');
 const router = require('koa-router')();
-const nwQuery = require('../../db/database');
 
 router.prefix('/upload');
 

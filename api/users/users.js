@@ -125,6 +125,7 @@ router.delete('/:id', async ctx => {
 router.put('/:id', async ctx => {
   const { id } = ctx.request.params
   const temObj = ctx.request.body
+  console.log(id,temObj);
   let sql = 'UPDATE users SET '
   for (const key in temObj) {
     if (Object.hasOwnProperty.call(temObj, key)) {
@@ -133,6 +134,7 @@ router.put('/:id', async ctx => {
   }
   sql = sql.slice(0, sql.length - 1) + ' WHERE id=?'
   const querySql = 'SELECT * FROM users WHERE id=?'
+  console.log(sql,querySql);
   try {
     await nwQuery(sql, id)
     const result = await nwQuery(querySql, id)
