@@ -10,7 +10,6 @@ router.post('/', async ctx => {
   let { album_name, lyrics, image } = ctx.request.body
   lyrics ? lyrics : ''
   image ? image : ''
-  console.log(song_name, author_name, url, create_author, album_name, lyrics, image);
   const create_time = new Date().toLocaleString()
   const sql = "INSERT INTO songs(song_name,author_name,author_id,album_name,album_id,url,create_time,create_author,lyrics,image) VALUES (?,?,?,?,?,?,?,?,?,?)"
   const querySql = "SELECT  * FROM songs WHERE url=?"
@@ -18,11 +17,6 @@ router.post('/', async ctx => {
   const albumSql = "SELECT id FROM albums WHERE album=?"
 
   try {
-    console.log('singerSql:',singerSql);
-    console.log('albumSql:',albumSql);
-    console.log(album_name,'album_name');
-    console.log(lyrics,'lyrics');
-    console.log(image,'image');
     let album_id = null
     let author_id = null
     let albumResult
@@ -36,9 +30,6 @@ router.post('/', async ctx => {
       album_id = null
     }
     const singerResult = await nwQuery(singerSql, author_name)
-    console.log(singerResult, albumResult);
-    
-    
     if (singerResult.length) {
       author_id = singerResult[0].id
     }
@@ -54,7 +45,6 @@ router.post('/', async ctx => {
       lyrics,
       image
     ]
-    console.log(sql, '------------', querySql,params);
     await nwQuery(sql, params)
     const result = await nwQuery(querySql, url)
     ctx.body = {

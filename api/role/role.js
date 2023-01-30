@@ -2,7 +2,7 @@ const router = require('koa-router')();
 const nwQuery = require('../../db/database');
 const dayjs = require('dayjs');
 router.prefix('/roles');
-// dayjs(item.create_time).format('YYYY-MM-DD  HH:mm:ss')
+
 // 添加角色
 router.post('/', async ctx => {
   const {role_name} = ctx.request.body
@@ -21,7 +21,6 @@ router.post('/', async ctx => {
       return 
     }
     const result = await nwQuery(sql,params)
-    console.log('添加成功返回的结果：',result);
     queryResult = await nwQuery(querySql,role_name)
     ctx.body = {
       status: 1,
