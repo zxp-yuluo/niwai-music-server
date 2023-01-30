@@ -7,7 +7,7 @@ router.prefix('/sheets');
 // 添加歌单
 router.post('/', async ctx => {
   const { name, describe, create_author,cover } = ctx.request.body
-  const create_time = new Date().toLocaleString()
+  const create_time = dayjs().format('YYYY-MM-DD  HH:mm:ss')
   const sql = "INSERT INTO song_sheets(`name`,`describe`,create_time,create_author,cover) VALUES(?,?,?,?,?)"
   const querySql = "SELECT * FROM song_sheets WHERE name=?"
   const params = [name, describe, create_time, create_author,cover?cover:'']

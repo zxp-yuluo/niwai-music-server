@@ -10,7 +10,7 @@ router.prefix('/users');
 router.post('/', async ctx => {
   const {username,role_name} = ctx.request.body
   const password = md5(ctx.request.body.password)
-  const create_time = new Date().toLocaleString()
+  const create_time = dayjs().format('YYYY-MM-DD  HH:mm:ss')
   const sql = "INSERT INTO users (username,password,create_time,role_id)  VALUES (?,?,?,?)"
   const querySql = 'SELECT * FROM users WHERE username=?'
   const params = [username, password, create_time, role_name]

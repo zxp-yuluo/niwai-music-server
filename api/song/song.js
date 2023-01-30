@@ -10,7 +10,7 @@ router.post('/', async ctx => {
   let { album_name, lyrics, image } = ctx.request.body
   lyrics ? lyrics : ''
   image ? image : ''
-  const create_time = new Date().toLocaleString()
+  const create_time = dayjs().format('YYYY-MM-DD  HH:mm:ss')
   const sql = "INSERT INTO songs(song_name,author_name,author_id,album_name,album_id,url,create_time,create_author,lyrics,image) VALUES (?,?,?,?,?,?,?,?,?,?)"
   const querySql = "SELECT  * FROM songs WHERE url=?"
   const singerSql = "SELECT id FROM singers WHERE singer=?"

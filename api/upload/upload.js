@@ -28,7 +28,7 @@ router.post('/image', async ctx => {
       data: {
         name: image.newFilename,
         image: {},
-        url: 'http://localhost:8888/image/' + image.newFilename
+        url: 'http://139.196.78.237/image/' + image.newFilename
       },
       message: '上传成功！'
     }
@@ -89,7 +89,7 @@ router.post('/audio', async ctx => {
       data: {
         name: audio.newFilename,
         audio: {},
-        url: 'http://localhost:8888/audio/' + audio.newFilename
+        url: 'http://139.196.78.237/audio/' + audio.newFilename
       },
       message: '上传成功！'
     }
@@ -134,7 +134,7 @@ router.post('/lyrics', async ctx => {
       data: {
         name: lyrics.newFilename,
         lyrics: {},
-        url: 'http://localhost:8888/lyrics/' + lyrics.newFilename
+        url: 'http://139.196.78.237/lyrics/' + lyrics.newFilename
       },
       message: '上传成功！'
     }

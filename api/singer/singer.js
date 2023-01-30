@@ -9,7 +9,7 @@ router.post('/', async ctx => {
   const { singer, avatar, create_author } = ctx.request.body
   const sql = "INSERT INTO singers (singer,avatar,create_author,create_time)  VALUES (?,?,?,?)"
   const querySql = "SELECT * FROM singers WHERE singer=?"
-  const create_time = new Date().toLocaleString()
+  const create_time = dayjs().format('YYYY-MM-DD  HH:mm:ss')
   const params = [singer, avatar, create_author, create_time]
   let result
   try {

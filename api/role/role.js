@@ -6,7 +6,7 @@ router.prefix('/roles');
 // 添加角色
 router.post('/', async ctx => {
   const {role_name} = ctx.request.body
-  const create_time = new Date().toLocaleString()
+  const create_time = dayjs().format('YYYY-MM-DD  HH:mm:ss')
   const sql ="INSERT INTO roles (role_name,create_time) VALUES (?,?)"
   const querySql ="SELECT * FROM roles WHERE role_name=?"
   const params = [role_name,create_time]
@@ -20,7 +20,7 @@ router.post('/', async ctx => {
       }
       return 
     }
-    const result = await nwQuery(sql,params)
+    await nwQuery(sql,params)
     queryResult = await nwQuery(querySql,role_name)
     ctx.body = {
       status: 1,
@@ -65,7 +65,7 @@ router.get('/', async ctx => {
 router.put('/:id', async ctx => {
   const {auth_name,menus} = ctx.request.body
   const {id} = ctx.request.params
-  const auth_time = new Date().toLocaleString()
+  const auth_time = dayjs().format('YYYY-MM-DD  HH:mm:ss')
   const sql = "UPDATE roles SET auth_time=?,auth_name=?,menus=? WHERE id=?"
   const querySql ="SELECT * FROM roles WHERE id=?"
   const params = [auth_time,auth_name,JSON.stringify(menus),id]

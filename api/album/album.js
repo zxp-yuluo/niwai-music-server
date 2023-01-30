@@ -11,7 +11,7 @@ router.post('/', async ctx => {
   // const sql = "INSERT INTO albums (album,cover,create_time,release_time,create_author)  VALUES (?,?,?,?,?)"
   const sql = "INSERT INTO albums (album,cover,create_time,create_author)  VALUES (?,?,?,?)"
   const querySql = "SELECT * FROM albums WHERE album=?"
-  const create_time = new Date().toLocaleString()
+  const create_time = dayjs().format('YYYY-MM-DD  HH:mm:ss')
   const params = [album, cover, create_time ,create_author]
   // const params = [album, cover, create_time, release_time,create_author]
   let result
