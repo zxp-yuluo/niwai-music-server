@@ -34,7 +34,7 @@ const router = new KoaRouter()
 
 server.use( async (ctx,next) => {
   const path = ctx.request.path.split('/')[1]
-  const pathType = ['login','image','audio','lyrics']
+  const pathType = ['login','image','audio','lyrics','upload']
   if(path) {
     if(!pathType.includes(path)) {
       const {authorization} = ctx.request.headers
