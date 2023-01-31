@@ -20,6 +20,7 @@ router.post('/', async ctx => {
         data: null,
         message: '歌手已存在！'
       }
+      return
     }
     result = await nwQuery(sql, params)
     result = await nwQuery(querySql, singer)
@@ -98,6 +99,7 @@ router.put('/:id', async ctx => {
   const tempObj = { singer, avatar }
   let sql = "UPDATE singers SET "
   const querySql = "SELECT * FROM singers WHERE singer=?"
+  const querySqlId = "SELECT * FROM singers WHERE id=?"
   for (const key in tempObj) {
     if (Object.hasOwnProperty.call(tempObj, key)) {
       sql += key + '=' + "'" + tempObj[key] + "'" + ','
@@ -106,16 +108,17 @@ router.put('/:id', async ctx => {
   sql = sql.slice(0, sql.length - 1) + ' WHERE id=?'
   let result
   try {
-    result = await nwQuery(querySql, id)
-    if (result.length) {
+    result = await nwQuery(querySql, singer)
+    if (!result.length) {
       ctx.body = {
         status: 0,
         data: null,
         message: '歌手已存在！'
       }
+      return
     }
     await nwQuery(sql, id)
-    result = await nwQuery(querySql, id)
+    result = await nwQuery(querySqlId, id)
     ctx.body = {
       status: 1,
       data: result[0],
