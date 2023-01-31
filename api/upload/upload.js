@@ -28,8 +28,8 @@ router.post('/image', async ctx => {
       data: {
         name: image.newFilename,
         image: {},
-        // url: 'http://139.196.78.237/api/image/' + image.newFilename
-        url: 'http://localhost:5000/image/' + image.newFilename
+        url: 'http://139.196.78.237/api/image/' + image.newFilename
+        // url: 'http://localhost:5000/image/' + image.newFilename
       },
       message: '上传成功！'
     }
