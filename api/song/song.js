@@ -1,6 +1,9 @@
 const router = require('koa-router')();
 const nwQuery = require('../../db/database');
+const fs = require('fs');
+const path = require('path')
 const dayjs = require('dayjs');
+const { myReadFile } = require('../../utils/index')
 
 router.prefix('/songs');
 
@@ -20,12 +23,12 @@ router.post('/', async ctx => {
     let album_id = null
     let author_id = null
     let albumResult
-    if(album_name) {
+    if (album_name) {
       albumResult = await nwQuery(albumSql, album_name)
       if (albumResult.length) {
         album_id = albumResult[0].id
       }
-    }else {
+    } else {
       album_name = ''
       album_id = null
     }
@@ -97,6 +100,7 @@ router.get('/search/:keywordType/:keyword/:create_author/:pageNum/:pageSize', as
     const totalResult = await nwQuery(totalSql)
     const { total } = totalResult[0]
     const pages = Math.ceil(total / pageSize)
+    console.log(totalResult);
     ctx.body = {
       status: 1,
       data: {
@@ -113,6 +117,35 @@ router.get('/search/:keywordType/:keyword/:create_author/:pageNum/:pageSize', as
       status: 0,
       data: null,
       message: '请求失败：' + error.message
+    }
+  }
+})
+// 根据id获取歌曲
+router.get('/by/:id', async ctx => {
+  const { id } = ctx.request.params
+  const sql = "SELECT * FROM songs WHERE id=?"
+  try {
+    const result = await nwQuery(sql, id)
+    console.log(result);
+    if (result.length > 0 && result[0].lyrics) {
+      let fileName = "niwaiyinyue_" + result[0].lyrics.split("niwaiyinyue_")[1]
+      // // 读取歌词
+      fileName = path.resolve(__dirname + `../../../public/lyrics/${fileName}`)
+      const r = await myReadFile(fileName)
+      result[0].lyrics = r.toString()
+      console.log(result[0].lyrics);
+    }
+
+    ctx.body = {
+      status: 1,
+      data: result[0],
+      message: '获取成功！'
+    }
+  } catch (error) {
+    ctx.body = {
+      status: 0,
+      data: null,
+      message: '请求错误：' + error.message
     }
   }
 })
@@ -163,6 +196,49 @@ router.put('/:id', async ctx => {
       status: 0,
       data: null,
       message: '请求错误：' + error.message
+    }
+  }
+})
+
+// 推荐歌曲
+router.get('/recommend', async ctx => {
+  const sql = "SELECT * FROM songs"
+  try {
+    const result = await nwQuery(sql)
+    function getArray(length) {
+      let tempArr = []
+      while (tempArr.length < 12) {
+        let num = Math.round(Math.random() * length)
+        if (tempArr.indexOf(num) === -1) {
+          tempArr.push(num)
+        }
+      }
+      return tempArr
+    }
+    const length = result.length - 1
+    if (length > 12) {
+      const arr = getArray(length)
+      let tempArray = []
+      for (let index = 0; index < 12; index++) {
+        tempArray.push(result[arr[index]])
+      }
+      ctx.body = {
+        status: 1,
+        data: tempArray,
+        message: '获取成功！'
+      }
+    } else {
+      ctx.body = {
+        status: 1,
+        data: result.reverse(),
+        message: '获取成功！'
+      }
+    }
+  } catch (error) {
+    ctx.body = {
+      status: 0,
+      data: null,
+      message: '请求失败：' + error.message
     }
   }
 })

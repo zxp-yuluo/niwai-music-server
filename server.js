@@ -32,21 +32,21 @@ const album = require('./api/album/album');
 const server = new Koa()
 const router = new KoaRouter()
 
-server.use( async (ctx,next) => {
-  const path = ctx.request.path.split('/')[1]
-  const pathType = ['login','image','audio','lyrics','upload']
-  if(path) {
-    if(!pathType.includes(path)) {
-      const {authorization} = ctx.request.headers
-      // 请求是否带有token
-      if(!authorization) ctx.throw(401)
-      const boolean = verifyToken(authorization.replace('niwai_',''))
-      // token过期
-      if(!boolean) ctx.throw(401)
-    }
-  }
-  await next()
-})
+// server.use( async (ctx,next) => {
+//   const path = ctx.request.path.split('/')[1]
+//   const pathType = ['login','image','audio','lyrics','upload']
+//   if(path) {
+//     if(!pathType.includes(path)) {
+//       const {authorization} = ctx.request.headers
+//       // 请求是否带有token
+//       if(!authorization) ctx.throw(401)
+//       const boolean = verifyToken(authorization.replace('niwai_',''))
+//       // token过期
+//       if(!boolean) ctx.throw(401)
+//     }
+//   }
+//   await next()
+// })
 
 server.use(static(path.resolve(__dirname + '/public')));
 

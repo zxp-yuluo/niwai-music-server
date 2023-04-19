@@ -44,6 +44,7 @@ router.get('/recommend', async ctx => {
   const sql = "SELECT * FROM song_sheets"
   try {
     const result = await nwQuery(sql)
+    // console.log(result);
     function getArray(length) {
       let tempArr = []
       while (tempArr.length < 6) {
@@ -54,9 +55,10 @@ router.get('/recommend', async ctx => {
       } 
       return tempArr
     }
-    const length = result.length
+    const length = result.length-1
     if (length > 6) {
       const arr = getArray(length)
+      console.log(arr);
       let tempArray = []
       for (let index = 0; index < 6; index++) {
         tempArray.push(result[arr[index]])
@@ -193,6 +195,66 @@ router.put('/:id', async ctx => {
       message: '请求失败：' + error.message
     }
   }
+})
+// 根据歌单id添加歌曲
+router.put('/song/:id', async ctx => {
+  const { id } = ctx.request.params
+  const data = ctx.request.body
+  const sql = "UPDATE song_sheets SET song_info=? WHERE id=?"
+  const querySql = "SELECT song_info FROM song_sheets WHERE id=?"
+  const querySql2 = "SELECT * FROM song_sheets WHERE id=?"
+  try {
+    console.log(data,id);
+    const queryResult = await nwQuery(querySql,id)
+    console.log(queryResult);
+    let {song_info} = queryResult[0]
+    if(!song_info) {
+      song_info = []
+    }else {
+      song_info = JSON.parse(song_info)
+    }
+    song_info.unshift(data)
+    console.log(song_info);
+    const params = [JSON.stringify(song_info),id]
+    await nwQuery(sql,params)
+    const queryResult1 = await nwQuery(querySql2,id)
+    queryResult1[0].song_info = JSON.parse(queryResult1[0].song_info)
+    ctx.body = {
+      status: 1,
+      data: queryResult1[0],
+      message: "添加成功！"
+    }
+  } catch (error) {
+    ctx.body = {
+      status: 0,
+      data: null,
+      message: "添加失败！" + error.message
+    }
+  }
+})
+// 根据id获取歌单
+router.get('/id/:id', async ctx => {
+  const sql = "SELECT * FROM song_sheets WHERE id=?"
+  const params = ctx.request.params.id
+  try {
+    const result = await nwQuery(sql, params)
+    // 处理时间
+    result.map(item => {
+      return item.create_time = dayjs(item.create_time).format('YYYY-MM-DD  HH:mm:ss')
+    })
+    ctx.body = {
+      status: 1,
+      data: result[0],
+      message: '获取成功！'
+    }
+  } catch (error) {
+    ctx.body = {
+      status: 0,
+      data: null,
+      message: '请求失败：' + error.message
+    }
+  }
+
 })
 
 module.exports = router
