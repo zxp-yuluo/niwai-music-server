@@ -28,8 +28,8 @@ router.post('/image', async ctx => {
       data: {
         name: image.newFilename,
         image: {},
-        // url: 'http://139.196.78.237/api/image/' + image.newFilename
-        url: 'http://localhost:5000/image/' + image.newFilename
+        url: 'https://zhuxinpeng.cn/nw/image/' + image.newFilename
+        // url: 'http://localhost:5000/image/' + image.newFilename
       },
       message: '上传成功！'
     }
@@ -90,8 +90,8 @@ router.post('/audio', async ctx => {
       data: {
         name: audio.newFilename,
         audio: {},
-        // url: 'http://139.196.78.237/api/audio/' + audio.newFilename
-        url: 'http://localhost:5000/audio/' + audio.newFilename
+        url: 'https://zhuxinpeng.cn/nw/audio/' + audio.newFilename
+        // url: 'http://localhost:5000/audio/' + audio.newFilename
       },
       message: '上传成功！'
     }
@@ -136,8 +136,8 @@ router.post('/lyrics', async ctx => {
       data: {
         name: lyrics.newFilename,
         lyrics: {},
-        // url: 'http://139.196.78.237/api/lyrics/' + lyrics.newFilename
-        url: 'http://localhost:5000/lyrics/' + lyrics.newFilename
+        url: 'https://zhuxinpeng.cn/nw/lyrics/' + lyrics.newFilename
+        // url: 'http://localhost:5000/lyrics/' + lyrics.newFilename
       },
       message: '上传成功！'
     }
