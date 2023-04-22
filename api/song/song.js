@@ -87,20 +87,21 @@ router.get('/search/:keywordType/:keyword/:create_author/:pageNum/:pageSize', as
         params = [...params, (pageNum - 1) * pageSize, Number(pageSize)]
         break;
       case 'singer':
-        sql = `SELECT SQL_CALC_FOUND_ROWS * FROM songs WHERE ${str} AND author_name like ? LIMIT ?,?;`
+        sql = `SELECT SQL_CALC_FOUND_ROWS * FROM songs WHERE ${str} author_name like ? LIMIT ?,?;`
         params = [...params, '%' + keyword + '%', (pageNum - 1) * pageSize, Number(pageSize)]
         break;
       case 'song':
-        sql = `SELECT SQL_CALC_FOUND_ROWS * FROM songs WHERE ${str} AND song_name=? LIMIT ?,?;`
+        sql = `SELECT SQL_CALC_FOUND_ROWS * FROM songs WHERE ${str} song_name=? LIMIT ?,?;`
         break;
     }
     const totalSql = "SELECT FOUND_ROWS() as total;"
     //-------------------------------
+    console.log(sql,params);
     const result = await nwQuery(sql, params)
     const totalResult = await nwQuery(totalSql)
     const { total } = totalResult[0]
     const pages = Math.ceil(total / pageSize)
-    console.log(totalResult);
+    // console.log(totalResult);
     ctx.body = {
       status: 1,
       data: {
@@ -126,14 +127,14 @@ router.get('/by/:id', async ctx => {
   const sql = "SELECT * FROM songs WHERE id=?"
   try {
     const result = await nwQuery(sql, id)
-    console.log(result);
+    // console.log(result);
     if (result.length > 0 && result[0].lyrics) {
       let fileName = "niwaiyinyue_" + result[0].lyrics.split("niwaiyinyue_")[1]
       // // 读取歌词
       fileName = path.resolve(__dirname + `../../../public/lyrics/${fileName}`)
       const r = await myReadFile(fileName)
       result[0].lyrics = r.toString()
-      console.log(result[0].lyrics);
+      // console.log(result[0].lyrics);
     }
 
     ctx.body = {
